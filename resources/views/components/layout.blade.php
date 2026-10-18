@@ -24,7 +24,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
             padding: 0 20px;
             width: 100%;
@@ -44,7 +44,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
+            padding: 14px 20px;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -71,7 +71,7 @@
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
@@ -95,6 +95,102 @@
             background-color: #3b82f6;
         }
 
+        /* Блок пользователя в шапке */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .badge-role {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-role-admin {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .badge-role-journalist {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .badge-role-user {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #7dd3fc;
+        }
+
+        .btn-logout {
+            background: #334155;
+            color: #cbd5e1;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-auth-link {
+            text-decoration: none;
+            color: #ffffff;
+            border: 1px solid #475569;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-auth-link:hover, .btn-auth-link.active {
+            background-color: #334155;
+            border-color: #3b82f6;
+        }
+
+        .btn-auth-register {
+            text-decoration: none;
+            background-color: #3b82f6;
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-auth-register:hover {
+            background-color: #2563eb;
+        }
+
         /* 2. Основная часть (Контент) */
         .main-content {
             flex: 1;
@@ -105,6 +201,11 @@
             margin-bottom: 25px;
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .page-title {
@@ -119,7 +220,7 @@
             margin-top: 4px;
         }
 
-        /* Уведомление об успехе */
+        /* Уведомления */
         .alert-success {
             background-color: #dcfce7;
             border: 1px solid #86efac;
@@ -130,8 +231,7 @@
             font-weight: 500;
         }
 
-        /* Ошибки валидации */
-        .alert-danger {
+        .alert-danger, .alert-error {
             background-color: #fee2e2;
             border: 1px solid #fca5a5;
             color: #991b1b;
@@ -143,6 +243,56 @@
         .alert-danger ul {
             margin-left: 20px;
             margin-top: 5px;
+        }
+
+        /* Фильтрация категорий (по требованию преподавателя) */
+        .filter-bar {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .category-pill {
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: #475569;
+            transition: all 0.2s ease;
+        }
+
+        .category-pill:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .category-pill.active {
+            background: #3b82f6;
+            color: #ffffff;
         }
 
         /* 3. Вертикальный список карточек новостей (по рисунку препода) */
@@ -218,13 +368,15 @@
             color: #64748b;
         }
 
-        /* 4. Стили формы Журналиста */
+        /* 4. Стили форм */
         .form-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .form-group {
@@ -265,10 +417,10 @@
             display: inline-block;
             background-color: #3b82f6;
             color: #ffffff;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border: none;
             border-radius: 6px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
@@ -279,17 +431,111 @@
             background-color: #2563eb;
         }
 
-        .btn-danger {
-            background-color: #ef4444;
+        .btn-sm {
             padding: 6px 12px;
             font-size: 0.85rem;
+        }
+
+        .btn-edit {
+            background-color: #f59e0b;
+            color: #ffffff;
+        }
+
+        .btn-edit:hover {
+            background-color: #d97706;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+            color: #ffffff;
         }
 
         .btn-danger:hover {
             background-color: #dc2626;
         }
 
-        /* 5. Таблица для Администратора */
+        .btn-secondary {
+            background-color: #64748b;
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        /* 5. Блок быстрого входа для преподавателя */
+        .demo-login-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .demo-login-box p {
+            color: #1e40af;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-demo {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: transform 0.1s ease;
+            display: inline-block;
+        }
+
+        .btn-demo:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-demo-admin {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .btn-demo-journalist {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .btn-demo-user {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #7dd3fc;
+        }
+
+        /* 6. Таблицы для Администратора */
+        .admin-section {
+            margin-bottom: 35px;
+        }
+
+        .admin-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .admin-section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
         .admin-table-wrapper {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -309,12 +555,12 @@
             background-color: #f8fafc;
             color: #475569;
             font-weight: 600;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid #e2e8f0;
         }
 
         .admin-table td {
-            padding: 14px 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
         }
@@ -327,7 +573,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .stat-box {
@@ -350,7 +596,15 @@
             margin-top: 4px;
         }
 
-        /* 6. Стили подвала (Footer) */
+        .form-select-sm {
+            padding: 6px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        /* 7. Стили подвала (Footer) */
         .site-footer {
             background-color: #1e293b;
             color: #94a3b8;
@@ -381,6 +635,13 @@
         @if (session('success'))
             <div class="alert-success">
                 ✅ {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Flash-сообщение об ошибке --}}
+        @if (session('error'))
+            <div class="alert-error">
+                ⚠️ {{ session('error') }}
             </div>
         @endif
 

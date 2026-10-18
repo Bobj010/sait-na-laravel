@@ -1,13 +1,20 @@
 {{-- Страница 3: Журналист — форма создания новой статьи --}}
 <x-layout title="Журналист">
     <div class="page-header">
-        <h1 class="page-title">Панель журналиста</h1>
-        <p class="page-subtitle">Заполните форму ниже, чтобы опубликовать новую статью на сайте</p>
+        <div>
+            <h1 class="page-title">Панель журналиста</h1>
+            <p class="page-subtitle">Публикация новостей доступна только для пользователей с ролью «Журналист» или «Администратор»</p>
+        </div>
+        <div>
+            <span class="badge-role badge-role-{{ auth()->user()->role }}">
+                Вы вошли как: {{ auth()->user()->role_title }}
+            </span>
+        </div>
     </div>
 
     <div class="form-card">
         <form action="{{ route('journalist.store') }}" method="POST">
-            {{-- Защита от CSRF-атак, обязательная в Laravel --}}
+            {{-- Защита от CSRF-атак --}}
             @csrf
 
             {{-- 1. Поле «Заголовок» --}}
@@ -24,14 +31,15 @@
                 >
             </div>
 
-            {{-- Категория новости (чтобы статья могла попасть в Каталог) --}}
+            {{-- Категория новости --}}
             <div class="form-group">
-                <label for="category" class="form-label">Тема / Категория</label>
-                <select id="category" name="category" class="form-select">
-                    <option value="Искусственный интеллект" {{ old('category') == 'Искусственный интеллект' ? 'selected' : '' }}>Искусственный интеллект</option>
-                    <option value="Технологии" {{ old('category') == 'Технологии' ? 'selected' : '' }}>Технологии</option>
-                    <option value="Космос" {{ old('category') == 'Космос' ? 'selected' : '' }}>Космос</option>
-                    <option value="Наука" {{ old('category') == 'Наука' ? 'selected' : '' }}>Наука</option>
+                <label for="category" class="form-label">Тема / Категория <span style="color: #ef4444;">*</span></label>
+                <select id="category" name="category" class="form-select" required>
+                    @foreach ($categories as $cat)
+                        <option value="{{ $cat }}" {{ old('category') == $cat ? 'selected' : '' }}>
+                            {{ $cat }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 
