@@ -22,7 +22,7 @@
             </a>
         </nav>
 
-        {{-- Блок авторизации пользователя / гостя --}}
+        {{-- Блок роли / авторизации пользователя --}}
         <div class="user-menu">
             @auth
                 <div class="user-info">
@@ -38,9 +38,13 @@
                     </form>
                 </div>
             @else
-                <div class="auth-links">
-                    <a href="{{ route('login') }}" class="btn-auth-link {{ request()->routeIs('login') ? 'active' : '' }}">Вход</a>
-                    <a href="{{ route('register') }}" class="btn-auth-register {{ request()->routeIs('register') ? 'active' : '' }}">Регистрация</a>
+                <div class="user-info">
+                    <span class="badge-role badge-role-user" title="Все посетители сайта по умолчанию читатели">
+                        👤 Читатель
+                    </span>
+                    <a href="{{ route('login') }}" class="btn-auth-link {{ request()->routeIs('login') ? 'active' : '' }}" title="Вход для журналистов и администраторов">
+                        Вход для редакции
+                    </a>
                 </div>
             @endauth
         </div>

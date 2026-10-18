@@ -16,9 +16,8 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        // 1. Если пользователь не авторизован — отправляем на страницу логина
         if (! auth()->check()) {
-            return redirect()->route('login')->with('error', 'Для доступа к этому разделу необходимо войти в систему.');
+            return redirect()->route('login')->with('error', 'Разделы «Журналист» и «Администратор» доступны сотрудникам редакции. Все посетители сайта по умолчанию являются читателями.');
         }
 
         $user = auth()->user();

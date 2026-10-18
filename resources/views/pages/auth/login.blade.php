@@ -2,8 +2,8 @@
 <x-layout title="Вход в систему">
     <div class="page-header" style="justify-content: center; text-align: center;">
         <div>
-            <h1 class="page-title">Авторизация</h1>
-            <p class="page-subtitle">Войдите в свой аккаунт для доступа к публикации и управлению</p>
+            <h1 class="page-title">Вход для редакции</h1>
+            <p class="page-subtitle">Все посетители сайта по умолчанию являются читателями.<br>Вход в систему требуется только авторам (Журналистам) и Администратору.</p>
         </div>
     </div>
 
@@ -53,20 +53,25 @@
 
         {{-- Блок быстрого входа для преподавателя --}}
         <div class="demo-login-box">
-            <p><strong>⚡ Быстрый вход для преподавателя (в 1 клик):</strong></p>
+            <p><strong>⚡ Быстрый вход для проверки ролей (в 1 клик):</strong></p>
             <div class="demo-buttons">
                 <a href="{{ route('quick-login', 'admin') }}" class="btn-demo btn-demo-admin" title="Вход с полным доступом ко всем разделам и админке">
-                    👑 Администратор
+                    👑 Войти как Администратор
                 </a>
                 <a href="{{ route('quick-login', 'journalist') }}" class="btn-demo btn-demo-journalist" title="Вход с доступом к созданию статей">
-                    ✍️ Журналист
-                </a>
-                <a href="{{ route('quick-login', 'user') }}" class="btn-demo btn-demo-user" title="Вход как обычный читатель">
-                    👤 Читатель
+                    ✍️ Войти как Журналист
                 </a>
             </div>
-            <div style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">
-                Все тестовые пароли: <code>12345</code>
+            <div style="font-size: 0.85rem; color: #475569; margin-top: 14px; line-height: 1.5;">
+                💡 <strong>Вы уже читатель по умолчанию!</strong> Читателям вход не требуется — все новости и каталог открыты сразу.
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="{{ route('home') }}" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+                    ← Вернуться к чтению новостей
+                </a>
+            </div>
+            <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 10px;">
+                Пароль для тестовых аккаунтов: <code>12345</code>
             </div>
         </div>
     </div>

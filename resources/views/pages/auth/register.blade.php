@@ -3,7 +3,7 @@
     <div class="page-header" style="justify-content: center; text-align: center;">
         <div>
             <h1 class="page-title">Регистрация</h1>
-            <p class="page-subtitle">Создайте аккаунт читателя для доступа к порталу</p>
+            <p class="page-subtitle">Все посетители сайта по умолчанию читатели. Регистрация позволяет создать персональный профиль</p>
         </div>
     </div>
 
