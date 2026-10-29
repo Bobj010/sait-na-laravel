@@ -25,3 +25,9 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Локальные файлы контекста
+AGENT.md
+AGENTS.md
+*.agent.md
+
