@@ -16,29 +16,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Создаем администратора
-        User::create([
-            'name' => 'Администратор сайта',
-            'email' => 'admin@test.ru',
-            'password' => Hash::make('12345'),
-            'role' => 'admin',
-        ]);
+        // 1. Создаем администратора (если еще не создан)
+        User::firstOrCreate(
+            ['email' => 'admin@test.ru'],
+            [
+                'name' => 'Администратор сайта',
+                'password' => Hash::make('12345'),
+                'role' => 'admin',
+            ]
+        );
 
-        // 2. Создаем журналиста
-        User::create([
-            'name' => 'Иван Журналист',
-            'email' => 'journalist@test.ru',
-            'password' => Hash::make('12345'),
-            'role' => 'journalist',
-        ]);
+        // 2. Создаем журналиста (если еще не создан)
+        User::firstOrCreate(
+            ['email' => 'journalist@test.ru'],
+            [
+                'name' => 'Иван Журналист',
+                'password' => Hash::make('12345'),
+                'role' => 'journalist',
+            ]
+        );
 
-        // 3. Создаем обычного читателя
-        User::create([
-            'name' => 'Алексей Читатель',
-            'email' => 'user@test.ru',
-            'password' => Hash::make('12345'),
-            'role' => 'user',
-        ]);
+        // 3. Создаем обычного читателя (если еще не создан)
+        User::firstOrCreate(
+            ['email' => 'user@test.ru'],
+            [
+                'name' => 'Алексей Читатель',
+                'password' => Hash::make('12345'),
+                'role' => 'user',
+            ]
+        );
 
         // Наполняем новостями
         $this->call(NewsSeeder::class);

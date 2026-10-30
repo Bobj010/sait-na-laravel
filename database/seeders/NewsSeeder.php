@@ -12,6 +12,10 @@ class NewsSeeder extends Seeder
      */
     public function run(): void
     {
+        if (News::count() > 0) {
+            return;
+        }
+
         News::create([
             'title' => 'Прорыв в сфере ИИ: Новые нейросети обучаются быстрее',
             'category' => 'Искусственный интеллект',
