@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,6 +23,16 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        // Если это один из тестовых аккаунтов, проверяем его наличие (автовосстановление)
+        $roleMap = [
+            'admin@test.ru' => 'admin',
+            'journalist@test.ru' => 'journalist',
+            'user@test.ru' => 'user',
+        ];
+        if (isset($roleMap[$credentials['email']])) {
+            $this->ensureUserExists($roleMap[$credentials['email']]);
+        }
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
@@ -74,17 +85,7 @@ class AuthController extends Controller
     // Быстрый вход для преподавателя (1 клик для проверки ролей)
     public function quickLogin(string $role)
     {
-        $emailMap = [
-            'admin' => 'admin@test.ru',
-            'journalist' => 'journalist@test.ru',
-            'user' => 'user@test.ru',
-        ];
-
-        if (! isset($emailMap[$role])) {
-            return redirect()->route('home')->with('error', 'Неизвестная роль.');
-        }
-
-        $user = User::where('email', $emailMap[$role])->first();
+        $user = $this->ensureUserExists($role);
 
         if ($user) {
             Auth::login($user);
@@ -92,6 +93,73 @@ class AuthController extends Controller
             return redirect()->route('home')->with('success', 'Вы мгновенно вошли как: '.$user->role_title.' ('.$user->name.')');
         }
 
-        return redirect()->route('login')->with('error', 'Пользователь не найден. Запустите сидер базы данных.');
+        return redirect()->route('login')->with('error', 'Не удалось инициализировать пользователя.');
+    }
+
+    /**
+     * Автоматическое создание/проверка системных пользователей (защита от пустой базы в колледже).
+     */
+    private function ensureUserExists(string $role): ?User
+    {
+        $defaultUsers = [
+            'admin' => [
+                'name' => 'Администратор сайта',
+                'email' => 'admin@test.ru',
+                'role' => 'admin',
+            ],
+            'journalist' => [
+                'name' => 'Иван Журналист',
+                'email' => 'journalist@test.ru',
+                'role' => 'journalist',
+            ],
+            'user' => [
+                'name' => 'Алексей Читатель',
+                'email' => 'user@test.ru',
+                'role' => 'user',
+            ],
+        ];
+
+        if (! isset($defaultUsers[$role])) {
+            return null;
+        }
+
+        try {
+            $user = User::where('email', $defaultUsers[$role]['email'])->first();
+            if ($user) {
+                return $user;
+            }
+        } catch (\Throwable $e) {
+            // Если таблиц еще нет в SQLite — накатываем миграции на лету
+            try {
+                Artisan::call('migrate', ['--force' => true]);
+            } catch (\Throwable $mError) {
+                // Игнорируем
+            }
+        }
+
+        // Пытаемся запустить сидер или найти пользователя
+        try {
+            Artisan::call('db:seed', ['--force' => true]);
+            $user = User::where('email', $defaultUsers[$role]['email'])->first();
+            if ($user) {
+                return $user;
+            }
+        } catch (\Throwable $sError) {
+            // Игнорируем
+        }
+
+        // Если сидер не сработал — гарантированно создаем запись вручную
+        try {
+            return User::firstOrCreate(
+                ['email' => $defaultUsers[$role]['email']],
+                [
+                    'name' => $defaultUsers[$role]['name'],
+                    'password' => Hash::make('12345'),
+                    'role' => $defaultUsers[$role]['role'],
+                ]
+            );
+        } catch (\Throwable $cError) {
+            return null;
+        }
     }
 }

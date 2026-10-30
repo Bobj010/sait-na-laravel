@@ -169,4 +169,20 @@ class NewsPagesTest extends TestCase
         $response->assertRedirect(route('home'));
         $this->assertAuthenticatedAs($admin);
     }
+
+    public function test_quick_login_auto_heals_when_user_is_missing(): void
+    {
+        // База абсолютно чистая, ни одного пользователя нет
+        $this->assertDatabaseCount('users', 0);
+
+        // Быстрый вход администратора должен автоматически восстановить пользователя
+        $response = $this->get(route('quick-login', 'admin'));
+        $response->assertRedirect(route('home'));
+        $this->assertAuthenticated();
+        $this->assertEquals('admin', auth()->user()->role);
+        $this->assertDatabaseHas('users', [
+            'email' => 'admin@test.ru',
+            'role' => 'admin',
+        ]);
+    }
 }
