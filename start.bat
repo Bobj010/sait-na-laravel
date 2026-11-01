@@ -1,7 +1,10 @@
 @echo off
 title Laravel News App
 
-if not exist .env copy .env.example .env
+if not exist .env (
+    copy .env.example .env > nul
+    php artisan key:generate --force > nul
+)
 if not exist database\database.sqlite type nul > database\database.sqlite
 
 php artisan migrate --force
