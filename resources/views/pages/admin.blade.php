@@ -44,7 +44,8 @@
                     <tr>
                         <th style="width: 50px;">ID</th>
                         <th>Заголовок</th>
-                        <th style="width: 170px;">Категория</th>
+                        <th style="width: 160px;">Категория</th>
+                        <th style="width: 150px;">Автор</th>
                         <th style="width: 140px;">Дата</th>
                         <th style="width: 180px; text-align: center;">Действия</th>
                     </tr>
@@ -55,7 +56,10 @@
                             <td><strong>#{{ $item->id }}</strong></td>
                             <td>{{ $item->title }}</td>
                             <td>
-                                <span class="news-category">{{ $item->category }}</span>
+                                <span class="news-category">{{ $item->category?->name ?? '—' }}</span>
+                            </td>
+                            <td>
+                                <span style="font-size: 0.85rem; color: #475569;">✍️ {{ $item->user?->name ?? 'Редакция' }}</span>
                             </td>
                             <td>{{ $item->created_at ? $item->created_at->format('d.m.Y H:i') : '—' }}</td>
                             <td style="text-align: center;">

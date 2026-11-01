@@ -2,7 +2,7 @@
 <x-layout title="Каталог">
     <div class="page-header">
         <div>
-            <h1 class="page-title">Каталог: {{ $selectedCategory }}</h1>
+            <h1 class="page-title">Каталог: {{ $selectedCategory?->name ?? 'Рубрики' }}</h1>
             <p class="page-subtitle">В этом разделе отображаются новости выбранной рубрики</p>
         </div>
 
@@ -10,10 +10,10 @@
         <div>
             <form method="GET" action="{{ route('catalog') }}" style="display: flex; gap: 8px; align-items: center;">
                 <label for="catalog-select" style="font-size: 0.85rem; font-weight: 600; color: #475569;">Рубрика:</label>
-                <select id="catalog-select" name="category" class="form-select-sm" onchange="this.form.submit()">
+                <select id="catalog-select" name="category_id" class="form-select-sm" onchange="this.form.submit()">
                     @foreach ($categories as $cat)
-                        <option value="{{ $cat }}" {{ $selectedCategory === $cat ? 'selected' : '' }}>
-                            {{ $cat }}
+                        <option value="{{ $cat->id }}" {{ $selectedCategory?->id === $cat->id ? 'selected' : '' }}>
+                            {{ $cat->name }}
                         </option>
                     @endforeach
                 </select>
@@ -26,8 +26,8 @@
         <span class="filter-label">📂 Рубрики каталога:</span>
         <div class="category-pills">
             @foreach ($categories as $cat)
-                <a href="{{ route('catalog', ['category' => $cat]) }}" class="category-pill {{ $selectedCategory === $cat ? 'active' : '' }}">
-                    {{ $cat }}
+                <a href="{{ route('catalog', ['category_id' => $cat->id]) }}" class="category-pill {{ $selectedCategory?->id === $cat->id ? 'active' : '' }}">
+                    {{ $cat->name }}
                 </a>
             @endforeach
         </div>
@@ -42,7 +42,7 @@
         </div>
     @else
         <div class="empty-state">
-            <h3>В теме «{{ $selectedCategory }}» пока нет новостей</h3>
+            <h3>В теме «{{ $selectedCategory?->name }}» пока нет новостей</h3>
             <p>Вы можете опубликовать новость через раздел <a href="{{ route('journalist') }}">«Журналист»</a>.</p>
         </div>
     @endif

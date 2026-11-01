@@ -2,53 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\News;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
-    // Список предопределенных тем для выпадающих списков
-    private array $defaultCategories = [
-        'Искусственный интеллект',
-        'Технологии',
-        'Космос',
-        'Наука',
-    ];
-
     // 1. Главная страница — лента всех новостей с возможностью фильтрации
     public function index(Request $request)
     {
-        $selectedCategory = $request->query('category');
+        $selectedCategoryId = $request->query('category_id');
 
-        $query = News::latest();
+        $query = News::with(['category', 'user'])->latest();
 
-        if (! empty($selectedCategory)) {
-            $query->where('category', $selectedCategory);
+        if (! empty($selectedCategoryId)) {
+            $query->where('category_id', $selectedCategoryId);
         }
 
         $news = $query->get();
+        $categories = Category::all();
 
-        // Получаем все уникальные категории из базы данных для фильтра
-        $categories = News::select('category')->distinct()->pluck('category')->toArray();
-        if (empty($categories)) {
-            $categories = $this->defaultCategories;
-        }
-
-        return view('pages.home', compact('news', 'categories', 'selectedCategory'));
+        return view('pages.home', compact('news', 'categories', 'selectedCategoryId'));
     }
 
     // 2. Каталог — лента новостей по выбранной категории (выпадающий список / табы)
     public function catalog(Request $request)
     {
-        $selectedCategory = $request->query('category', 'Искусственный интеллект');
+        $categories = Category::all();
+        $selectedCategoryId = $request->query('category_id', $categories->first()?->id);
+        $selectedCategory = $categories->where('id', $selectedCategoryId)->first() ?? $categories->first();
 
-        $news = News::where('category', $selectedCategory)->latest()->get();
-
-        $categories = News::select('category')->distinct()->pluck('category')->toArray();
-        if (empty($categories)) {
-            $categories = $this->defaultCategories;
-        }
+        $news = $selectedCategory
+            ? $selectedCategory->news()->with('user')->latest()->get()
+            : collect();
 
         return view('pages.catalog', compact('news', 'categories', 'selectedCategory'));
     }
@@ -56,7 +43,7 @@ class NewsController extends Controller
     // 3. Журналист — страница добавления новой статьи
     public function journalist()
     {
-        $categories = $this->defaultCategories;
+        $categories = Category::all();
 
         return view('pages.journalist', compact('categories'));
     }
@@ -64,15 +51,15 @@ class NewsController extends Controller
     // Обработка формы создания новости от журналиста
     public function store(Request $request)
     {
+        // Валидация строго по ID существующей категории (защита от изменения на фронтенде)
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'content' => 'required|string',
-            'category' => 'nullable|string|max:100',
         ]);
 
-        if (empty($validated['category'])) {
-            $validated['category'] = 'Искусственный интеллект';
-        }
+        // Автоматическая привязка автора (текущего пользователя)
+        $validated['user_id'] = auth()->id();
 
         News::create($validated);
 
@@ -82,7 +69,7 @@ class NewsController extends Controller
     // Редактирование статьи администратором
     public function edit(News $news)
     {
-        $categories = $this->defaultCategories;
+        $categories = Category::all();
 
         return view('pages.news-edit', compact('news', 'categories'));
     }
@@ -92,8 +79,8 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'content' => 'required|string',
-            'category' => 'required|string|max:100',
         ]);
 
         $news->update($validated);
@@ -104,7 +91,7 @@ class NewsController extends Controller
     // 4. Администратор — страница управления новостями и ролями пользователей
     public function admin()
     {
-        $news = News::latest()->get();
+        $news = News::with(['category', 'user'])->latest()->get();
         $users = User::latest()->get();
 
         return view('pages.admin', compact('news', 'users'));

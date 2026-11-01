@@ -28,11 +28,11 @@
             </div>
 
             <div class="form-group">
-                <label for="category" class="form-label">Тема / Категория</label>
-                <select id="category" name="category" class="form-select" required>
+                <label for="category_id" class="form-label">Тема / Категория</label>
+                <select id="category_id" name="category_id" class="form-select" required>
                     @foreach ($categories as $cat)
-                        <option value="{{ $cat }}" {{ old('category', $news->category) == $cat ? 'selected' : '' }}>
-                            {{ $cat }}
+                        <option value="{{ $cat->id }}" {{ old('category_id', $news->category_id) == $cat->id ? 'selected' : '' }}>
+                            {{ $cat->name }}
                         </option>
                     @endforeach
                 </select>

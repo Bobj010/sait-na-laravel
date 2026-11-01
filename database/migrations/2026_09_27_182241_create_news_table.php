@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete(); // Автор публикации (User hasMany News)
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete(); // Связь с категорией (Category hasMany News)
             $table->string('title'); // Заголовок новости
-            $table->string('category')->default('Искусственный интеллект'); // Категория (для каталога)
             $table->text('content'); // Текст статьи
             $table->timestamps(); // created_at и updated_at
         });

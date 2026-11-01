@@ -46,7 +46,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Наполняем новостями
+        // Сначала создаем категории
+        $this->call(CategorySeeder::class);
+
+        // Наполняем новостями (с привязкой к категориям и авторам)
         $this->call(NewsSeeder::class);
     }
 }

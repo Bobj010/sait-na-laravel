@@ -26,11 +26,11 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 
-# Локальные файлы контекста
+# Локальные файлы контекста и документации
 AGENT.md
 AGENTS.md
 *.agent.md
-docs/docx_prepoda/
-docs/golosovyye/
+docs/
+
 
 
